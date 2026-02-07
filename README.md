@@ -53,4 +53,6 @@ It copies the following output to your clipboard and returns:
 This software is relesed under the GNU/GPL 3.0 License. 
 
 ## Contacts
-Guido Mascia, mascia.guido@gmail.com, guidomascia.blog
+Guido Mascia
+Email: mascia.guido@gmail.com
+Website: https://guidomascia.blog

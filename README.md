@@ -54,5 +54,5 @@ This software is relesed under the GNU/GPL 3.0 License.
 
 ## Contacts
 Guido Mascia
-Email: mascia.guido@gmail.com
-Website: https://guidomascia.blog
+- Email: mascia.guido@gmail.com
+- Website: https://guidomascia.blog

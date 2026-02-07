@@ -3,7 +3,8 @@ import json
 import pyperclip
 import sys
 import io
-import json 
+import json
+import argparse
 
 # required for converting months from numbers into strings
 months = {1: 'jan', 2: 'feb', 3: 'mar', 4: 'apr', 5: 'may', 6: 'jun',
@@ -51,7 +52,7 @@ def extractInfo(metadata):
     uniqueID = metadata['author'][0]['family'] + str(year)                      # uniqueID is the surname of the first author followed by the publication year
 
     if len(pub_date) > 1:
-        month = months[pub_date[1]]         # if present, month of publication
+        month = months[pub_date[1]]                                             # if present, month of publication
     else:
         month = ''
 
@@ -87,31 +88,31 @@ def extractInfo(metadata):
 
     return joined
 
+def main():
+    parser = argparse.ArgumentParser(description="Extrapolates publication information from a given doi. It shows the BibTeX entry in the terminal and automatically copy it to the clipboard.")
+    parser.add_argument("doi", help="The doi of the publication. Accepted formats: 'https://doi.org/10.XXXXX' OR '10.XXXXX'")
+    args = parser.parse_args()
+    doi = args.doi
 
-doi = 'https://doi.org/10.1109/BSN63547.2024.10780647'
-doi = '10.1109/TNSRE.2025.3594540'
-#doi = '10.1109/MeMeA52024.2021.9478688'
-metadata = getMetadata(doi)
+    # Load data
+    metadata = getMetadata(doi)
+    # Arrange aata
+    info = extractInfo(metadata)
 
-with open('data.json', 'w') as f:
-    json.dump(metadata, f, indent=4)
+    ## \* Initialize Buffer for copying to clipboard */ ##
+    original_stdout = sys.stdout
+    sys.stdout = io.StringIO()
 
-info = extractInfo(metadata)
+    ## \* Print information */ ##
+    print(info)
 
-## \* Initialize Buffer for copying to clipboard */ ##
-original_stdout = sys.stdout
-sys.stdout = io.StringIO()
+    ## \* Get the value from the buffer and reset stdout */ ##
+    captured_output = sys.stdout.getvalue()
+    sys.stdout = original_stdout
 
-## \* Print information */ ##
-print(info)
+    ## \* Copy the captured output to the clipboard and print it also */ ##
+    pyperclip.copy(captured_output)
+    print(captured_output)
 
-## \* Get the value from the buffer and reset stdout */ ##
-captured_output = sys.stdout.getvalue()
-sys.stdout = original_stdout
-
-## \* Copy the captured output to the clipboard and print it also */ ##
-pyperclip.copy(captured_output)
-print(captured_output)
-
-# Debug lines
-#print(len(metadata['published-print']['date-parts'][0]), metadata['published-print']['date-parts'][0])
+if __name__ == '__main__':
+    main()

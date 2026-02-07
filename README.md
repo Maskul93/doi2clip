@@ -49,3 +49,8 @@ It copies the following output to your clipboard and returns:
 	pages = {3096-3104} 
 }
 ```
+## License
+This software is relesed under the GNU/GPL 3.0 License. 
+
+## Contacts
+Guido Mascia, mascia.guido@gmail.com, guidomascia.blog

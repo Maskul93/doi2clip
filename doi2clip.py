@@ -47,7 +47,13 @@ def arrangeAuthors(authors):
 def extractInfo(metadata):
     # First extract all common information
     authors = arrangeAuthors(metadata['author'])                                # author names
-    pub_date = metadata['published-print']['date-parts'][0]
+
+    # Publication date
+    try:                                                                        # If printed
+        pub_date = metadata['published-print']['date-parts'][0] 
+    except:                                                                     # If online only
+        pub_date = metadata['published-online']['date-parts'][0]
+
     year = pub_date[0]                                                          # year of publication
     uniqueID = metadata['author'][0]['family'] + str(year)                      # uniqueID is the surname of the first author followed by the publication year
 
@@ -68,7 +74,12 @@ def extractInfo(metadata):
         
         journal = metadata['container-title']
         publisher = metadata['publisher']
-        pages = metadata['page']
+
+        # Check if page numbers exist
+        try:
+            pages = metadata['page']
+        except KeyError:
+            pages = ''
 
         joined = "".join([f'@{doc_type}{{{uniqueID},\n', f'\t title = {{{title}}},\n', f'\t volume = {{{volume}}},\n', 
             f'\t ISSN = {{{issn}}},\n', f'\t url = {{{url}}},\n', f'\t DOI = {{{doi_meta}}},\n', f'\t journal = {{{journal}}},\n', 
@@ -96,6 +107,7 @@ def main():
 
     # Load data
     metadata = getMetadata(doi)
+
     # Arrange aata
     info = extractInfo(metadata)
 
